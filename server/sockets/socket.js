@@ -15,13 +15,17 @@ io.on('connection', (client) => {
         client.join(data.room);
         let users = user.addUser(client.id, data.username, data.room);
         client.broadcast.to(data.room).emit('newUser', user.getUsersPerRoom(data.room));
+        client.broadcast.to(data.room).emit('createMessage', createMessage('Admin', `${data.username} has join`));
+
         callback(users);
 
     });
-    client.on('createMessage', (data) => {
+    client.on('createMessage', (data, callback) => {
         let userChat = user.getUser(client.id);
         let message = createMessage(userChat.username, data.message);
         client.broadcast.to(userChat.room).emit('createMessage', message);
+
+        callback(message);
     });
     //Private messages
     client.on('privateMessage', data => {

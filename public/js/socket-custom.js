@@ -11,16 +11,18 @@ var user = {
 socket.on('connect', function () {
     console.log('Connected to server..');
     socket.emit('enterChat', user, function (response) {
-        console.log('Connected users: ', response);
+        // console.log('Connected users: ', response);
+        usersRender(response);
     });
 });
 
 socket.on('createMessage', function (message) {
-    console.log(message);
+    messagesRender(message, false);
+    scrollBotton();
 });
 
 socket.on('newUser', function (users) {
-    console.log(users);
+    usersRender(users);
 })
 
 //Private messages
